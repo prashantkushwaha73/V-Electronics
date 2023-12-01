@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vishal Electricals | Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static "shop/style.css" %}">
+  </head>
+  <body>
+
+
+   <!-- Navbar************************************************* -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Dropdown
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href=".switch">Switches</a></li>
+                <li><a class="dropdown-item" href=".fan">Fans</a></li>
+                <li><a class="dropdown-item" href=".led">Leds</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+            </li>
+          </ul>
+          <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+          <span class="mx-2">  | </span>
+          <button type="button" class="btn btn-secondary" id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Vivamus
+sagittis lacus vel augue laoreet rutrum faucibus.">
+Amount to pay - <span id="cart">  </span> Rs 
+</button>
+          
+          
+        </div>
+      </div>
+    </nav>
+    
+    <!--***************************************************************************************** -->
+
+    <!--  Carousal ******************************************************************************  -->
+     
+     <!--  ********   ***********************************************************************************************  -->
+     
+     {% for i in alll %}
+         <div class="mx-3 my-3 {{i}}">
+            <h3 class="text-center"> {{i}} </h3>
+            <div class="row">
+              <div class="MultiCarousel" data-items="2,4,5,7" data-slide="1" id="MultiCarousel"  data-interval="1100">
+                      <div class="MultiCarousel-inner">
+                        {% for j in list %}
+
+                        {% if j.category == i %}
+                        <div class="item">
+                          <div class="card" style="width: 11rem;">
+                            <img src="/media/{{j.image}}" class="card-img-top" alt="...">
+                            <div class="card-body">
+                              <p>{{j.desc}}</p>
+                              <p>Rs. {{j.price}}</p>
+                              <button id="ld{{j.id}}" value="{{j.category}} {{j.desc}}" name={{j.price}} class="btn btn-primary cart">Add to Cart</button>
+                            </div>
+                          </div>
+                        </div>
+                         {% endif %}
+            
+            
+                        {% endfor %}
+                      </div>
+                      <button class="btn btn-primary leftLst"><</button>
+                      <button class="btn btn-primary rightLst">></button>
+                  </div>
+            
+                 </div>
+           
+                </div>
+     {% endfor %}
+
+    <!-- ************************************************************************************************* -->
+     
+
+
+    <script>
+      $(document).ready(function () {
+        var itemsMainDiv = ('.MultiCarousel');
+        var itemsDiv = ('.MultiCarousel-inner');
+        var itemWidth = "";
+    
+        $('.leftLst, .rightLst').click(function () {
+            var condition = $(this).hasClass("leftLst");
+            if (condition)
+                click(0, this);
+            else
+                click(1, this)
+        });
+
+        ResCarouselSize();
+    
+    
+    
+    
+        $(window).resize(function () {
+            ResCarouselSize();
+        });
+    
+        //this function define the size of the items
+        function ResCarouselSize() {
+            var incno = 0;
+            var dataItems = ("data-items");
+            var itemClass = ('.item');
+            var id = 0;
+            var btnParentSb = '';
+            var itemsSplit = '';
+            var sampwidth = $(itemsMainDiv).width();
+            var bodyWidth = $('body').width();
+            $(itemsDiv).each(function () {
+                id = id + 1;
+                var itemNumbers = $(this).find(itemClass).length;
+                btnParentSb = $(this).parent().attr(dataItems);
+                itemsSplit = btnParentSb.split(',');
+                $(this).parent().attr("id", "MultiCarousel" + id);
+    
+    
+                if (bodyWidth >= 1100) {
+                    incno = itemsSplit[3];
+                    itemWidth = sampwidth / incno;
+                }
+                else if (bodyWidth >= 992) {
+                    incno = itemsSplit[2];
+                    itemWidth = sampwidth / incno;
+                }
+                else if (bodyWidth >= 768) {
+                    incno = itemsSplit[1];
+                    itemWidth = sampwidth / incno;
+                }
+                else {
+                    incno = itemsSplit[0];
+                    itemWidth = sampwidth / incno;
+                }
+                $(this).css({ 'transform': 'translateX(0px)', 'width': itemWidth * itemNumbers });
+                $(this).find(itemClass).each(function () {
+                    $(this).outerWidth(itemWidth);
+                });
+    
+                $(".leftLst").addClass("over");
+                $(".rightLst").removeClass("over");
+    
+            });
+        }
+    
+    
+        //this function used to move the items
+        function ResCarousel(e, el, s) {
+            var leftBtn = ('.leftLst');
+            var rightBtn = ('.rightLst');
+            var translateXval = '';
+            var divStyle = $(el + ' ' + itemsDiv).css('transform');
+            var values = divStyle.match(/-?[\d\.]+/g);
+            var xds = Math.abs(values[4]);
+            if (e == 0) {
+                translateXval = parseInt(xds) - parseInt(itemWidth * s);
+                $(el + ' ' + rightBtn).removeClass("over");
+    
+                if (translateXval <= itemWidth / 2) {
+                    translateXval = 0;
+                    $(el + ' ' + leftBtn).addClass("over");
+                }
+            }
+            else if (e == 1) {
+                var itemsCondition = $(el).find(itemsDiv).width() - $(el).width();
+                translateXval = parseInt(xds) + parseInt(itemWidth * s);
+                $(el + ' ' + leftBtn).removeClass("over");
+    
+                if (translateXval >= itemsCondition - itemWidth / 2) {
+                    translateXval = itemsCondition;
+                    $(el + ' ' + rightBtn).addClass("over");
+                }
+            }
+            $(el + ' ' + itemsDiv).css('transform', 'translateX(' + -translateXval + 'px)');
+        }
+    
+        //It is used to get some elements from btn
+        function click(ell, ee) {
+            var Parent = "#" + $(ee).parent().attr("id");
+            var slide = $(Parent).attr("data-slide");
+            ResCarousel(ell, Parent, slide);
+        }
+    
+    });
+    </script>  
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    
+    <script>
+      if(localStorage.getItem('cart') == null){
+        var cart = {};
+        document.getElementById('cart').innerHTML = 0;
+      }
+      else{
+        cart = JSON.parse(localStorage.getItem('cart'));
+        
+      }
+      if(localStorage.getItem('total') == null){
+        var total = 0;
+      }
+      else{
+        total = JSON.parse(localStorage.getItem('total'));
+        document.getElementById('cart').innerHTML = total;
+      }
+
+      $('.cart').click(function(){
+        console.log('clicked');
+        var idstr = this.id.toString();
+        var price = this.name;
+        var addd = this.value;
+        total = total + Number(price);
+        console.log(total);
+        localStorage.setItem('total',JSON.stringify(total));
+        if(cart[addd] != undefined){
+          cart[addd] = cart[addd]+1;
+        }
+        else{
+          cart[addd] = 1;
+        }
+        console.log(cart);
+        localStorage.setItem('cart',JSON.stringify(cart));
+        document.getElementById('cart').innerHTML = total;
+      });
+     </script>
+
+
+  </body>
+</html>
